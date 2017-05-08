@@ -7,30 +7,26 @@ package bmf;
 
 import com.sun.java.swing.plaf.windows.WindowsClassicLookAndFeel;
 import java.awt.GridLayout;
-import java.awt.Image;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.scene.paint.Color;
-import javax.imageio.ImageIO;
+
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 /**
  *
- * @author Dell
+ * @author Francisco Javier Rubio Ibañez
  */
 public class Interfaz extends javax.swing.JFrame {
 
     public static final int DIM = 10;
-
-    private int[][] matrizTerreno = new int[DIM][DIM];
-    private JLabel[][] celdas = new JLabel[DIM][DIM];
+    public static int[][] matrizTerreno = new int[DIM][DIM];
+    public static JLabel[][] celdas = new JLabel[DIM][DIM];
+    public static String personaje;
 
     /**
      * Creates new form Interfaz
@@ -44,7 +40,7 @@ public class Interfaz extends javax.swing.JFrame {
         }
 
     }
-
+    
     public void dibujarTerreno() throws IOException {
 
         terreno.setLayout(new GridLayout(DIM, DIM));
@@ -92,7 +88,7 @@ public class Interfaz extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        entrenar = new javax.swing.JButton();
         crear = new javax.swing.JButton();
         jTextField1 = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
@@ -189,7 +185,12 @@ public class Interfaz extends javax.swing.JFrame {
 
         jLabel7.setText("Muro");
 
-        jButton1.setText("Entrenar");
+        entrenar.setText("Entrenar");
+        entrenar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                entrenarActionPerformed(evt);
+            }
+        });
 
         crear.setText("Crear");
         crear.addActionListener(new java.awt.event.ActionListener() {
@@ -222,7 +223,7 @@ public class Interfaz extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(entrenar, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
@@ -257,7 +258,7 @@ public class Interfaz extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE)
                 .addComponent(crear)
                 .addGap(18, 18, 18)
-                .addComponent(jButton1)
+                .addComponent(entrenar)
                 .addContainerGap())
         );
 
@@ -420,16 +421,30 @@ public class Interfaz extends javax.swing.JFrame {
         // TODO add your handling code here:
         int montana=0,barranco=0,agua=0,muro=0;
         int fila,columna;
+        int aux;
+        
+        /*
+        Inicializamos todo
+        */
+
+        
+        if(DIM==10){
+            aux=3;
+        }else{
+            aux=9;
+        }
+        
         
         //50% de
         muro=(porcentajeMuro.getValue()/DIM);
-        muro*=3;
+        muro*=aux;
         barranco=(porcentajeBarranco.getValue()/DIM);
-        barranco*=3;
+        barranco*=aux;
         montana=(porcentajeMontana.getValue()/DIM);
-        montana*=3;
+        montana*=aux;
+                
         agua=(porcentajeAgua.getValue()/DIM);
-        agua*=3;
+        agua*=aux;
         
        
         fila=(int)(Math.random()*4 + 0);
@@ -459,13 +474,24 @@ public class Interfaz extends javax.swing.JFrame {
             colocarPirolo();
             
         }
-
+         
 
     }//GEN-LAST:event_crearActionPerformed
+
+    private void entrenarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_entrenarActionPerformed
+        // TODO add your handling code here:
+         
+        Entrenamiento e= new Entrenamiento();
+        
+        e.entrenar();
+        
+        
+    }//GEN-LAST:event_entrenarActionPerformed
 
     
     public void colocarPirolo(){
         int fila,columna;
+        personaje="Pirolo";
         
         fila=(int)(Math.random()*DIM + 0);
         columna=(int)(Math.random()*DIM + 0);
@@ -478,8 +504,8 @@ public class Interfaz extends javax.swing.JFrame {
     }
     
     public void colocarLucas(){
-                int fila,columna;
-        
+       int fila,columna;
+       personaje="Lucas";
         fila=(int)(Math.random()*DIM + 0);
         columna=(int)(Math.random()*DIM + 0);
         
@@ -489,7 +515,8 @@ public class Interfaz extends javax.swing.JFrame {
     }
     
     public void colocarMombo(){
-                int fila,columna;
+         int fila,columna;
+        personaje="Mombo";
         
         fila=(int)(Math.random()*DIM + 0);
         columna=(int)(Math.random()*DIM + 0);
@@ -508,12 +535,7 @@ public class Interfaz extends javax.swing.JFrame {
                 
                 matrizTerreno[i][j]=0;
                 pintarMapa(i, j);
-                
-                
-                
-            }
-            
-            
+            }     
         }
         
         
@@ -562,7 +584,7 @@ public class Interfaz extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton crear;
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton entrenar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
