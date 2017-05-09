@@ -27,6 +27,7 @@ public class Interfaz extends javax.swing.JFrame {
     public static int[][] matrizTerreno = new int[DIM][DIM];
     public static JLabel[][] celdas = new JLabel[DIM][DIM];
     public static String personaje;
+    public static int iteraciones;
 
     /**
      * Creates new form Interfaz
@@ -90,7 +91,7 @@ public class Interfaz extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         entrenar = new javax.swing.JButton();
         crear = new javax.swing.JButton();
-        jTextField1 = new javax.swing.JTextField();
+        iteracionesT = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
         terreno = new javax.swing.JPanel();
 
@@ -229,7 +230,7 @@ public class Interfaz extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel8)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(iteracionesT, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -253,7 +254,7 @@ public class Interfaz extends javax.swing.JFrame {
                 .addComponent(porcentajeMuro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(iteracionesT, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel8))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE)
                 .addComponent(crear)
@@ -482,7 +483,7 @@ public class Interfaz extends javax.swing.JFrame {
         // TODO add your handling code here:
          
         Entrenamiento e= new Entrenamiento();
-        
+        iteraciones=Integer.parseInt(iteracionesT.getText());
         e.entrenar();
         
         
@@ -585,6 +586,7 @@ public class Interfaz extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton crear;
     private javax.swing.JButton entrenar;
+    private javax.swing.JTextField iteracionesT;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -595,7 +597,6 @@ public class Interfaz extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JRadioButton lucasR;
     private javax.swing.JRadioButton momboR;
     private javax.swing.ButtonGroup personajes;
