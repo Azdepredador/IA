@@ -13,14 +13,16 @@ public class Recorrido {
     
     public  int fila;
     public  int columna;
-    public  int ponderacion;
+    public  double ponderacion;
     public  double esfuerzo;
+    public int id;
 
-    public Recorrido(int fila, int columna, int ponderacion, double esfuerzo) {
+    public Recorrido(int fila, int columna, double ponderacion, double esfuerzo, int id) {
         this.fila = fila;
         this.columna = columna;
         this.ponderacion = ponderacion;
         this.esfuerzo = esfuerzo;
+        this.id = id;
     }
 
     public int getFila() {
@@ -39,11 +41,11 @@ public class Recorrido {
         this.columna = columna;
     }
 
-    public int getPonderacion() {
+    public double getPonderacion() {
         return ponderacion;
     }
 
-    public void setPonderacion(int ponderacion) {
+    public void setPonderacion(double ponderacion) {
         this.ponderacion = ponderacion;
     }
 
@@ -54,6 +56,18 @@ public class Recorrido {
     public void setEsfuerzo(double esfuerzo) {
         this.esfuerzo = esfuerzo;
     }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+    
+    
+
+   
 
    
     

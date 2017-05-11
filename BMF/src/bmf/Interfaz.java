@@ -7,6 +7,7 @@ package bmf;
 
 import com.sun.java.swing.plaf.windows.WindowsClassicLookAndFeel;
 import java.awt.GridLayout;
+import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -28,6 +29,9 @@ public class Interfaz extends javax.swing.JFrame {
     public static JLabel[][] celdas = new JLabel[DIM][DIM];
     public static String personaje;
     public static int iteraciones;
+    int fila, columna;
+
+    public static boolean keyq = false, keyw = false, keye = false, keya = false, keys = false, keyd = false, keyESC = false;
 
     /**
      * Creates new form Interfaz
@@ -41,7 +45,7 @@ public class Interfaz extends javax.swing.JFrame {
         }
 
     }
-    
+
     public void dibujarTerreno() throws IOException {
 
         terreno.setLayout(new GridLayout(DIM, DIM));
@@ -192,6 +196,11 @@ public class Interfaz extends javax.swing.JFrame {
                 entrenarActionPerformed(evt);
             }
         });
+        entrenar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                entrenarKeyPressed(evt);
+            }
+        });
 
         crear.setText("Crear");
         crear.addActionListener(new java.awt.event.ActionListener() {
@@ -309,80 +318,63 @@ public class Interfaz extends javax.swing.JFrame {
      muro -> 4
     
     
-    casa-> 30
-    agente-> 31
+     casa-> 30
+     agente-> 31
     
     
     
     
     
      */
-    public void crearMatriz(int montana,int barranco,int agua,int muro) {
+    public void crearMatriz(int montana, int barranco, int agua, int muro) {
         int num;
-        int contMontana=0,contBarranco=0,contAgua=0,contMuro=0;
-        
-        
+        int contMontana = 0, contBarranco = 0, contAgua = 0, contMuro = 0;
+
         for (int i = 0; i < DIM; i++) {
             for (int j = 0; j < DIM; j++) {
 
                 num = (int) (Math.random() * 7 + 0);
-                
-                if(num==1){
-                   
-                    
-                    if(agua!=contAgua){
-                        matrizTerreno[i][j]=num;
+
+                if (num == 1) {
+
+                    if (agua != contAgua) {
+                        matrizTerreno[i][j] = num;
                         contAgua++;
+                    } else {
+                        matrizTerreno[i][j] = 0;
                     }
-                    else{
-                        matrizTerreno[i][j]=0;
-                    }
-                    
-                }
-                else if(num==2){
-                    
-                    
-                    if(contBarranco!=barranco){
-                        matrizTerreno[i][j]=num;
+
+                } else if (num == 2) {
+
+                    if (contBarranco != barranco) {
+                        matrizTerreno[i][j] = num;
                         contBarranco++;
+                    } else {
+                        matrizTerreno[i][j] = 0;
                     }
-                    else{
-                        matrizTerreno[i][j]=0;
-                    }
-                    
-                    
-                }
-                else if(num==3){
-                    
-                    if(contMontana!=montana){
-                        matrizTerreno[i][j]=num;
+
+                } else if (num == 3) {
+
+                    if (contMontana != montana) {
+                        matrizTerreno[i][j] = num;
                         contMontana++;
+                    } else {
+                        matrizTerreno[i][j] = 0;
                     }
-                    else{
-                        matrizTerreno[i][j]=0;
+
+                } else if (num == 4) {
+
+                    if (contMuro != muro) {
+                        matrizTerreno[i][j] = num;
+                        contMuro++;
+                    } else {
+                        matrizTerreno[i][j] = 0;
                     }
-                    
-                    
-                }
-                else if(num==4){
-                    
- 
-                    
-                    if(contMuro!=muro){
-                        matrizTerreno[i][j]=num;
-                         contMuro++;
-                    }
-                    else{
-                        matrizTerreno[i][j]=0;
-                    }
-                    
-                    
-                }
-                else{
-                    matrizTerreno[i][j]=0;
+
+                } else {
+                    matrizTerreno[i][j] = 0;
                 }
 
-                
                 pintarMapa(i, j);
                 //System.out.print(matrizTerreno[i][j] + " ");
 
@@ -394,7 +386,7 @@ public class Interfaz extends javax.swing.JFrame {
     public void pintarMapa(int fila, int columna) {
 
         switch (matrizTerreno[fila][columna]) {
-            
+
             case 0:
                 celdas[fila][columna].setIcon(null);
                 break;
@@ -412,7 +404,6 @@ public class Interfaz extends javax.swing.JFrame {
                 celdas[fila][columna].setIcon(new ImageIcon(getClass().getResource("/Imagenes/muro.png")));
                 break;
 
-
         }
 
     }
@@ -420,129 +411,298 @@ public class Interfaz extends javax.swing.JFrame {
 
     private void crearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_crearActionPerformed
         // TODO add your handling code here:
-        int montana=0,barranco=0,agua=0,muro=0;
-        int fila,columna;
+        int montana = 0, barranco = 0, agua = 0, muro = 0;
+        int fila, columna;
         int aux;
-        
+
         /*
-        Inicializamos todo
-        */
-
-        
-        if(DIM==10){
-            aux=3;
-        }else{
-            aux=9;
+         Inicializamos todo
+         */
+        if (DIM == 10) {
+            aux = 3;
+        } else {
+            aux = 9;
         }
-        
-        
+
         //50% de
-        muro=(porcentajeMuro.getValue()/DIM);
-        muro*=aux;
-        barranco=(porcentajeBarranco.getValue()/DIM);
-        barranco*=aux;
-        montana=(porcentajeMontana.getValue()/DIM);
-        montana*=aux;
-                
-        agua=(porcentajeAgua.getValue()/DIM);
-        agua*=aux;
-        
-       
-        fila=(int)(Math.random()*4 + 0);
-        columna=(int)(Math.random()*5 + 0);
-        
+        muro = (porcentajeMuro.getValue() / DIM);
+        muro *= aux;
+        barranco = (porcentajeBarranco.getValue() / DIM);
+        barranco *= aux;
+        montana = (porcentajeMontana.getValue() / DIM);
+        montana *= aux;
 
-        
-        
-        
+        agua = (porcentajeAgua.getValue() / DIM);
+        agua *= aux;
+
+        fila = (int) (Math.random() * 4 + 0);
+        columna = (int) (Math.random() * 5 + 0);
+
         limpiar();
-        crearMatriz(montana,barranco,agua,muro);
-        
-        
+        crearMatriz(montana, barranco, agua, muro);
+
         celdas[fila][columna].setIcon(new ImageIcon(getClass().getResource("/Imagenes/casa.png")));
-        matrizTerreno[fila][columna]=30;
-        
-        
-        if(lucasR.isSelected()){
+        matrizTerreno[fila][columna] = 30;
+
+        if (lucasR.isSelected()) {
             colocarLucas();
-            
-        }
-        else if(momboR.isSelected()){
+
+        } else if (momboR.isSelected()) {
             colocarMombo();
-        }
-        else if(piroloR.isSelected()){
-            
+        } else if (piroloR.isSelected()) {
+
             colocarPirolo();
-            
+
         }
-         
+
 
     }//GEN-LAST:event_crearActionPerformed
 
     private void entrenarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_entrenarActionPerformed
         // TODO add your handling code here:
-         
-        Entrenamiento e= new Entrenamiento();
-        iteraciones=Integer.parseInt(iteracionesT.getText());
+
+        Entrenamiento e = new Entrenamiento();
+        if (lucasR.isSelected()) {
+            personaje = "Lucas";
+
+        } else if (momboR.isSelected()) {
+            personaje = "Mombo";
+        } else if (piroloR.isSelected()) {
+
+            personaje = "Pirolo";
+
+        }
+
+        iteraciones = Integer.parseInt(iteracionesT.getText());
         e.entrenar();
-        
-        
+
+        for (int i = 0; i < DIM; i++) {
+            for (int j = 0; j < DIM; j++) {
+                if (matrizTerreno[i][j] == 31) {
+                    fila = i;
+                    columna = j;
+                    celdas[fila][columna].setIcon(new ImageIcon(getClass().getResource("/Imagenes/" + personaje + ".png")));
+                    break;
+                }
+            }
+        }
+
+        /* while (!keyESC) {
+               
+         if (keyq) {
+         System.out.print("Presiono Q");
+         keyq = false;
+         celdas[fila--][columna--].setIcon(new ImageIcon(getClass().getResource("/Imagenes/" + personaje + ".png")));
+         pintarMapa(fila, columna);
+
+         }
+         if (keyw) {
+         keyw = false;
+         celdas[fila--][columna].setIcon(new ImageIcon(getClass().getResource("/Imagenes/" + personaje + ".png")));
+         //     Thread.sleep(1000);
+         pintarMapa(fila, columna);
+
+         }
+         if (keye) {
+         keye = false;
+         celdas[fila--][columna++].setIcon(new ImageIcon(getClass().getResource("/Imagenes/" + personaje + ".png")));
+         //     Thread.sleep(1000);
+         pintarMapa(fila, columna);
+
+         }
+         if (keya) {
+         keya = false;
+         celdas[fila++][columna--].setIcon(new ImageIcon(getClass().getResource("/Imagenes/" + personaje + ".png")));
+         //     Thread.sleep(1000);
+         pintarMapa(fila, columna);
+
+         }
+         if (keys) {
+         keys = false;
+         celdas[fila++][columna].setIcon(new ImageIcon(getClass().getResource("/Imagenes/" + personaje + ".png")));
+         //     Thread.sleep(1000);
+         pintarMapa(fila, columna);
+
+         }
+         if (keyd) {
+         keyd = false;
+         celdas[fila++][columna++].setIcon(new ImageIcon(getClass().getResource("/Imagenes/" + personaje + ".png")));
+         //     Thread.sleep(1000);
+         pintarMapa(fila, columna);
+
+         }
+
+         }*/
+
     }//GEN-LAST:event_entrenarActionPerformed
 
-    
-    public void colocarPirolo(){
-        int fila,columna;
-        personaje="Pirolo";
-        
-        fila=(int)(Math.random()*DIM + 0);
-        columna=(int)(Math.random()*DIM + 0);
-       
-        celdas[fila][columna].setIcon(new ImageIcon(getClass().getResource("/Imagenes/Pirolo.png")));
-        matrizTerreno[fila][columna]=31;
-        
-        
-        
-    }
-    
-    public void colocarLucas(){
-       int fila,columna;
-       personaje="Lucas";
-        fila=(int)(Math.random()*DIM + 0);
-        columna=(int)(Math.random()*DIM + 0);
-        
-        celdas[fila][columna].setIcon(new ImageIcon(getClass().getResource("/Imagenes/Lucas.png")));
-        matrizTerreno[fila][columna]=31;
-        
-    }
-    
-    public void colocarMombo(){
-         int fila,columna;
-        personaje="Mombo";
-        
-        fila=(int)(Math.random()*DIM + 0);
-        columna=(int)(Math.random()*DIM + 0);
-        
-        
-        celdas[fila][columna].setIcon(new ImageIcon(getClass().getResource("/Imagenes/Mombo.png")));
-        matrizTerreno[fila][columna]=31;
-    }
-    
-    
-    
-    public void limpiar(){
-        
-        for(int i=0; i<DIM; i++){
-            for(int j=0; j<DIM; j++){
-                
-                matrizTerreno[i][j]=0;
-                pintarMapa(i, j);
-            }     
+    private void pintarMapa2(int fila, int columna) {
+
+        celdas[fila][columna].setIcon(null);
+
+        switch (matrizTerreno[fila][columna]) {
+
+            case 0:
+                System.out.println("Borra");
+                celdas[fila][columna].setIcon(null);
+                break;
+
+            case 1:
+                celdas[fila][columna].setIcon(new ImageIcon(getClass().getResource("/Imagenes/agua.png")));
+                break;
+            case 2:
+                celdas[fila][columna].setIcon(new ImageIcon(getClass().getResource("/Imagenes/barranco.png")));
+                break;
+            case 3:
+                celdas[fila][columna].setIcon(new ImageIcon(getClass().getResource("/Imagenes/montana.png")));
+                break;
+            case 4:
+                celdas[fila][columna].setIcon(new ImageIcon(getClass().getResource("/Imagenes/muro.png")));
+                break;
+
+            case 31:
+                celdas[fila][columna].setIcon(new ImageIcon(getClass().getResource("/Imagenes/" + personaje + ".png")));
+                break;
+
+            case 30:
+              
+
+                celdas[fila][columna].setIcon(new ImageIcon(getClass().getResource("/Imagenes/casa.png")));
+                break;
+
         }
-        
-        
+
     }
+
+    private void entrenarKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_entrenarKeyPressed
+        // TODO add your handling code here:
+        switch (evt.getKeyCode()) {
+
+            case KeyEvent.VK_W:
+                pintarMapa2(fila, columna);
+                fila--;
+//              keyw = false;
+                celdas[fila][columna].setIcon(new ImageIcon(getClass().getResource("/Imagenes/" + personaje + ".png")));
+                     
+                llegoAcasa();
+                break;
+            case KeyEvent.VK_Q:
+                pintarMapa2(fila, columna);
+                columna--;
+                fila--;
+                System.out.print("Presiono Q");
+
+                celdas[fila][columna].setIcon(new ImageIcon(getClass().getResource("/Imagenes/" + personaje + ".png")));
+                
+                llegoAcasa();
+                //keyq=true;
+                break;
+            case KeyEvent.VK_E:
+                pintarMapa2(fila, columna);
+                fila--;
+                columna++;
+                
+                celdas[fila][columna].setIcon(new ImageIcon(getClass().getResource("/Imagenes/" + personaje + ".png")));
+                //     Thread.sleep(1000);
+                llegoAcasa();
+                break;
+            case KeyEvent.VK_A:
+                pintarMapa(fila, columna);
+                fila++;
+                columna--;
+                celdas[fila][columna].setIcon(new ImageIcon(getClass().getResource("/Imagenes/" + personaje + ".png")));
+                //     Thread.sleep(1000);
+                llegoAcasa();
+                break;
+            case KeyEvent.VK_S:
+                pintarMapa2(fila, columna);
+                fila++;
+                celdas[fila][columna].setIcon(new ImageIcon(getClass().getResource("/Imagenes/" + personaje + ".png")));
+                //     Thread.sleep(1000);
+                llegoAcasa();
+                break;
+            case KeyEvent.VK_D:
+                pintarMapa2(fila, columna);
+                fila++;columna++;
+                celdas[fila][columna].setIcon(new ImageIcon(getClass().getResource("/Imagenes/" + personaje + ".png")));
+                //     Thread.sleep(1000);
+                llegoAcasa();
+                break;
+            case KeyEvent.VK_M:
+                pintarMapa2(fila, columna);
+                columna++;
+                celdas[fila][columna].setIcon(new ImageIcon(getClass().getResource("/Imagenes/" + personaje + ".png")));
+                llegoAcasa();
+                break;
+            case KeyEvent.VK_N:
+                pintarMapa2(fila, columna);
+                columna--;
+                celdas[fila][columna].setIcon(new ImageIcon(getClass().getResource("/Imagenes/" + personaje + ".png")));
+                llegoAcasa();
+                break;
+
+        }
+
+    }//GEN-LAST:event_entrenarKeyPressed
+
+    public void llegoAcasa(){
+                switch (matrizTerreno[fila][columna]) {
+
+
+            case 30:
+              
+
+                celdas[fila][columna].setIcon(new ImageIcon(getClass().getResource("/Imagenes/casa.png")));
+                break;
+
+        }
+    }    
     
-    
+    public void colocarPirolo() {
+        int fila, columna;
+        personaje = "Pirolo";
+
+        fila = (int) (Math.random() * DIM + 0);
+        columna = (int) (Math.random() * DIM + 0);
+
+        matrizTerreno[fila][columna] = 31;
+
+    }
+
+    public void colocarLucas() {
+        int fila, columna;
+        personaje = "Lucas";
+        fila = (int) (Math.random() * DIM + 0);
+        columna = (int) (Math.random() * DIM + 0);
+
+        celdas[fila][columna].setIcon(new ImageIcon(getClass().getResource("/Imagenes/Lucas.png")));
+        matrizTerreno[fila][columna] = 31;
+
+    }
+
+    public void colocarMombo() {
+        int fila, columna;
+        personaje = "Mombo";
+
+        fila = (int) (Math.random() * DIM + 0);
+        columna = (int) (Math.random() * DIM + 0);
+
+        celdas[fila][columna].setIcon(new ImageIcon(getClass().getResource("/Imagenes/Mombo.png")));
+        matrizTerreno[fila][columna] = 31;
+    }
+
+    public void limpiar() {
+
+        for (int i = 0; i < DIM; i++) {
+            for (int j = 0; j < DIM; j++) {
+
+                matrizTerreno[i][j] = 0;
+                pintarMapa(i, j);
+            }
+        }
+
+    }
+
     /**
      * @param args the command line arguments
      */
